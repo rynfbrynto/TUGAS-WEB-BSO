@@ -1,24 +1,25 @@
+
 /**
  * api.js
- * Mengambil data katalog dari Google Apps Script.
+ * Mengambil data katalog dari Google Apps Script (GAS).
  */
 
-import { CONFIG } from './config.js';
+import { CONFIG } from "./config.js";
 
 /**
- * Mengambil data toko dan daftar produk dari API.
+ * Mengambil identitas toko dan daftar produk dari API.
  */
 export async function fetchCatalog() {
   const apiUrl = CONFIG?.API_URL;
 
   // Periksa konfigurasi URL API.
   if (
-    !apiUrl ||
-    typeof apiUrl !== 'string' ||
-    apiUrl.includes('AKfycb...')
+    typeof apiUrl !== "string" ||
+    apiUrl.trim() === "" ||
+    apiUrl.includes("AKfycb...")
   ) {
     throw new Error(
-      'URL API belum dikonfigurasi. Periksa file js/config.js.'
+      "URL API belum dikonfigurasi. Periksa nilai API_URL di js/config.js."
     );
   }
 
@@ -27,68 +28,64 @@ export async function fetchCatalog() {
   // Mengirim request ke Google Apps Script.
   try {
     response = await fetch(apiUrl, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Accept: 'application/json'
+        Accept: "application/json"
       },
-      cache: 'no-store'
+      cache: "no-store"
     });
   } catch (error) {
     throw new Error(
-      'Gagal terhubung ke API. Periksa koneksi internet dan URL API.',
-      { cause: error }
+      "Tidak dapat terhubung ke API katalog. Periksa koneksi internet dan URL deployment Apps Script."
     );
   }
 
-  // Memeriksa status respons HTTP.
+  // Memeriksa apakah request berhasil.
   if (!response.ok) {
     throw new Error(
-      `Permintaan API gagal: HTTP ${response.status}.`
+      `Request API gagal dengan HTTP ${response.status} (${response.statusText}).`
     );
   }
 
-  // Mengubah respons menjadi objek JavaScript.
   let data;
 
+  // Membaca respons dalam format JSON.
   try {
     data = await response.json();
   } catch (error) {
     throw new Error(
-      'Respons API bukan JSON yang valid.',
-      { cause: error }
+      "Respons API tidak dapat dibaca sebagai JSON. Periksa deployment Google Apps Script."
     );
   }
 
-  // Memeriksa struktur data utama.
-  if (
-    !data ||
-    typeof data !== 'object' ||
-    Array.isArray(data)
-  ) {
-    throw new Error('Format respons API tidak valid.');
+  // Memeriksa status respons dari Code.gs.
+  if (!data || data.status !== "success") {
+    const apiMessage =
+      typeof data?.message === "string" && data.message.trim()
+        ? data.message
+        : "API tidak mengembalikan status success.";
+
+    throw new Error(`API katalog bermasalah: ${apiMessage}`);
   }
 
-  if (data.status && data.status !== 'success') {
-    throw new Error(
-      'API mengembalikan status selain success.'
-    );
-  }
-
+  // Memvalidasi struktur data toko.
   if (
-    !data.store ||
-    typeof data.store !== 'object' ||
+    typeof data.store !== "object" ||
+    data.store === null ||
     Array.isArray(data.store)
   ) {
-    throw new Error('Data identitas toko tidak ditemukan.');
+    throw new Error("Format data toko dari API tidak valid.");
   }
 
+  // Memvalidasi daftar produk.
   if (!Array.isArray(data.products)) {
-    throw new Error('Format daftar produk tidak valid.');
+    throw new Error("Format daftar produk dari API tidak valid.");
   }
 
-  // Data siap digunakan oleh modul lain.
+  // Mengembalikan data yang dibutuhkan frontend.
   return {
     store: data.store,
-    products: data.products
+    products: data.products,
+    timestamp: data.timestamp
   };
 }
