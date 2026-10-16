@@ -2,9 +2,9 @@
 
 Website katalog produk dinamis berbasis arsitektur web statis (*Jamstack*) tanpa memerlukan hosting server backend maupun database SQL berbayar. Seluruh data identitas toko dan daftar inventaris produk dikelola langsung melalui Google Sheets, disajikan dalam bentuk REST API menggunakan Google Apps Script (GAS), dan di-hosting secara publik via GitHub Pages.
 
-🔗 **Live Demo:** belum ada
+🔗 **Live Demo:**  Belum ada
 
-## 🚀 Fitur Utama
+🚀 Fitur Utama
 
 * **Headless CMS via Google Sheets**: Kelola katalog (tambah, perbarui, dan arsipkan produk) langsung dari lembar kerja spreadsheet tanpa perlu merilis atau build ulang repositori website.
 
@@ -31,6 +31,7 @@ Website katalog produk dinamis berbasis arsitektur web statis (*Jamstack*) tanpa
          ├──> js/store.js     (Render Brand, Info Toko, & Footer)
          ├──> js/products.js  (Render Grid Kartu & Format IDR)
          └──> js/whatsapp.js  (Generator Link & Pesan WhatsApp)
+
 
 ```
 
@@ -82,31 +83,62 @@ Endpoint backend diakses menggunakan protokol HTTP `GET` publik:
 
 ## 🗄️ Struktur Database (Google Sheets)
 
-Database menggunakan satu buku kerja (*workbook*) Google Sheets dengan dua lembar tab kerja:
+Database menggunakan satu buku kerja (*workbook*) Google Sheets yang terdiri dari dua lembar tab kerja:
 
 ### 1. Tab `Pengaturan`
 
-Menyimpan konfigurasi identitas toko (format pasangan kunci-nilai):
+Menyimpan konfigurasi identitas toko dalam format pasangan kunci-nilai (*key-value*).
 
-| Kolom A (Key) | Kolom B (Value) | Keterangan | 
+**Struktur Kolom:**
+
+| Kolom | Tipe | Keterangan | 
 | ----- | ----- | ----- | 
-| `nama_toko` | Trianggoro Store | Nama toko yang ditampilkan pada header & footer | 
-| `slogan` | Katalog Produk Pilihan Berkualitas | Tagline atau deskripsi singkat toko | 
-| `no_wa` | 6281234567890 | Nomor WhatsApp toko diawali kode negara (62) | 
+| **Kolom A (Key)** | Teks | Kunci identitas variabel konfigurasi | 
+| **Kolom B (Value)** | Teks | Nilai pengaturan toko | 
+
+**Contoh Tampilan Lembar Kerja `Pengaturan`:**
+
+| Kolom A (Key) | Kolom B (Value) | 
+| ----- | ----- | 
+| `nama_toko` | Trianggoro Store | 
+| `slogan` | Katalog Produk Pilihan Berkualitas | 
+| `no_wa` | 6281234567890 | 
 
 ### 2. Tab `Produk`
 
-Menyimpan daftar produk katalog toko:
+Menyimpan daftar seluruh barang inventaris toko. Baris pertama berfungsi sebagai *header*.
 
-| Kolom | Tipe Data | Deskripsi | Contoh | 
+**Spesifikasi Kolom:**
+
+| Kolom | Header | Tipe Data | Deskripsi | 
 | ----- | ----- | ----- | ----- | 
-| `id` | Angka / Teks | Identifier unik produk | `1` | 
-| `nama` | Teks | Nama lengkap barang | `Kaos Polos Hitam` | 
-| `kategori` | Teks | Kategori untuk pengelompokan | `Pakaian` | 
-| `harga` | Angka | Nominal harga (angka murni tanpa titik/Rp) | `75000` | 
-| `gambar` | URL | Tautan langsung gambar produk (bisa dikosongkan) | `https://...` | 
-| `deskripsi` | Teks | Rincian spesifikasi barang | `Bahan katun combed 30s` | 
-| `status` | Teks | Status ketersediaan (`aktif` / `nonaktif`) | `aktif` | 
+| **A** | `id` | Angka / Teks | Pengidentifikasi unik produk | 
+| **B** | `nama` | Teks | Nama lengkap barang katalog | 
+| **C** | `kategori` | Teks | Nama kategori untuk pengelompokan filter | 
+| **D** | `harga` | Angka | Nominal murni tanpa titik atau simbol mata uang | 
+| **E** | `gambar` | URL | Tautan langsung gambar produk (bisa dikosongkan) | 
+| **F** | `deskripsi` | Teks | Penjelasan singkat spesifikasi barang | 
+| **G** | `status` | Teks | Status ketersediaan: `aktif` atau `nonaktif` | 
+
+**Contoh Tampilan Lembar Kerja `Produk`:**
+
+| id | nama | kategori | harga | gambar | deskripsi | status | 
+| ----- | ----- | ----- | ----- | ----- | ----- | ----- | 
+| `1` | Kaos Polos Hitam | Pakaian | `75000` | `https://images.unsplash.com/...` | Bahan katun combed 30s adem dan nyaman dipakai | `aktif` | 
+| `2` | Hoodie Casual Navy | Pakaian | `165000` | *(kosong)* | Hoodie katun fleece tebal dan lembut | `aktif` | 
+| `3` | Kemeja Flanel Kotak | Pakaian | `135000` | *(kosong)* | Kemeja flanel lengan panjang gaya kasual | `aktif` | 
+| `4` | Celana Chino Slim Fit | Celana | `145000` | *(kosong)* | Celana chino stretch bahan twill premium | `aktif` | 
+| `5` | Jaket Denim Vintage | Jaket | `210000` | *(kosong)* | Denim wash 14oz tebal model klasik | `nonaktif` | 
+
+> 💡 **Petunjuk Input Data:**
+>
+> * **Nomor WhatsApp**: Awali dengan kode negara tanpa simbol tambah, contoh: `6281234567890`.
+>
+> * **Harga**: Tulis angka bulat saja (misal `75000`, bukan `Rp 75.000` atau `75.000`).
+>
+> * **Gambar Kosong**: Jika kolom gambar dikosongkan, kartu produk di website otomatis menggunakan ikon *placeholder SVG* bawaan.
+>
+> * **Status Nonaktif**: Produk dengan status `nonaktif` aman disimpan di spreadsheet untuk arsip tanpa akan muncul di halaman katalog web.
 
 ## 📁 Struktur Direktori Repositori
 
@@ -126,6 +158,7 @@ TUGAS/
 │   └── whatsapp.js          # Generator tautan transaksi chat WhatsApp
 ├── index.html               # Halaman utama aplikasi katalog web
 └── README.md                # Dokumentasi teknis proyek
+
 
 ```
 
@@ -155,7 +188,7 @@ cd TUGAS
 
    * **Yang memiliki akses**: `Siapa saja (Anyone)`
 
-6. Klik **Deploy**, selesaikan perizinan akun Google (*Review Permissions* > *Advanced* > *Allow*), lalu salin URL Web App yang berakhiran `/exec`.
+6. Klik **Deploy**, selesaikan perizinan otorisasi akun Google (*Review Permissions* > *Advanced* > *Allow*), lalu salin URL Web App yang berakhiran `/exec`.
 
 ### 3. Konfigurasi Endpoint Frontend
 
