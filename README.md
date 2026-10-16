@@ -167,8 +167,8 @@ TUGAS/
 ### 1. Kloning Repositori
 
 ```
-git clone https://github.com/ixroo/TUGAS.git
-cd TUGAS
+git clone https://github.com/rynfbrynto/TUGAS-WEB-BSO.git
+cd TUGAS-WEB-BSO
 
 ```
 
