@@ -1,33 +1,8 @@
-/* Penyesuaian Tablet (max-width: 768px) */
 @media (max-width: 768px) {
-  .header-container {
-    padding-block: 10px;
-  }
-
-  .store-logo {
-    width: 44px;
-    height: 44px;
-  }
-
-  .store-name {
-    font-size: 1.1rem;
-  }
-
-  .store-slogan {
-    font-size: 0.8rem;
-  }
-
-  .products-grid {
-    gap: 12px;
-  }
-}
-
-/* Penyesuaian Mobile (max-width: 480px) */
-@media (max-width: 480px) {
   .header-container {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 1rem;
   }
 
   .header-action {
@@ -36,58 +11,49 @@
 
   .btn-wa-direct {
     width: 100%;
-    padding: 7px 12px;
-  }
-
-  .main-content {
-    padding-block: 16px 36px;
+    justify-content: center;
   }
 
   .toolbar-section {
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 
-  /* Grid 2 Kolom Ringkas */
+  .search-box {
+    max-width: 100%;
+  }
+
   .products-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
   }
 
-  /* Penyesuaian Kartu Produk Ringkas */
-  .product-body {
-    padding: 8px;
-    gap: 4px;
+  .product-info {
+    padding: 0.85rem;
   }
 
   .product-title {
-    font-size: 0.85rem;
-    line-height: 1.25;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .product-desc {
-    display: none; /* Disembunyikan agar kartu tetap ringkas dan tinggi seimbang */
-  }
-
-  .product-price {
     font-size: 0.875rem;
-    margin-top: 2px;
   }
 
-  .product-badge {
-    top: 6px;
-    left: 6px;
-    padding: 1px 6px;
-    font-size: 0.65rem;
+  .product-description {
+    display: none;
+  }
+
+  .product-action-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
   }
 
   .btn-order {
-    padding: 6px 4px;
-    font-size: 0.75rem;
-    margin-top: 6px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .products-grid {
+    grid-template-columns: 1fr;
   }
 }
