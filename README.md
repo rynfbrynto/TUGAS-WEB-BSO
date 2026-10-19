@@ -2,7 +2,7 @@
 
 Website katalog produk dinamis berbasis arsitektur web statis (*Jamstack*) tanpa memerlukan hosting server backend maupun database SQL berbayar. Seluruh data identitas toko dan daftar inventaris produk dikelola langsung melalui Google Sheets, disajikan dalam bentuk REST API menggunakan Google Apps Script (GAS), dan di-hosting secara publik via GitHub Pages.
 
-🔗 **Live Demo:**  Belum ada
+🔗 **Live Demo:**  https://rynfbrynto.github.io/TUGAS-WEB-BSO/
 
 🚀 Fitur Utama
 
